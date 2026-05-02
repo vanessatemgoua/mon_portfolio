@@ -479,6 +479,7 @@ function CertCard({ c }) {
         display: "flex", alignItems: "center", justifyContent: "center",
         marginBottom: "0.9rem", overflow: "hidden",
         boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+        margin: "0 auto 0.9rem",
       }}>
         <img src={c.logo} alt={c.org} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
       </div>
@@ -511,13 +512,13 @@ function CertCard({ c }) {
 function CertificationsPage() {
   const mob = useW() < 768;
   const certs = [
-    { title: "Data Analyst Associate", org: "Datacamp", year: "2025", logo: "https://logo.clearbit.com/datacamp.com", status: "obtenu" },
-    { title: "Data Analytics Job Simulation", org: "Forage", year: "2025", logo: "https://logo.clearbit.com/theforage.com", status: "obtenu" },
-    { title: "L'essentiel de Google Cloud Platform", org: "LinkedIn Learning", year: "2025", logo: "https://logo.clearbit.com/linkedin.com", status: "obtenu" },
-    { title: "Python pour la finance", org: "LinkedIn Learning", year: "2025", logo: "https://logo.clearbit.com/linkedin.com", status: "obtenu" },
-    { title: "Power BI Data Analyst Associate", org: "Microsoft", year: "2026", logo: "https://logo.clearbit.com/microsoft.com", status: "en_cours" },
-    { title: "Data Engineer Associate", org: "Datacamp", year: "2026", logo: "https://logo.clearbit.com/datacamp.com", status: "en_cours" },
-    { title: "Snowflake Data Warehouse", org: "Snowflake", year: "2026", logo: "https://logo.clearbit.com/snowflake.com", status: "en_cours" },
+    { title: "Data Analyst Associate", org: "Datacamp", year: "2025", logo: "datacamp.png", status: "obtenu" },
+    { title: "Data Analytics Job Simulation", org: "Forage", year: "2025", logo: "forage.png", status: "obtenu" },
+    { title: "L'essentiel de Google Cloud Platform", org: "LinkedIn Learning", year: "2025", logo: "linkedin.png", status: "obtenu" },
+    { title: "Python pour la finance", org: "LinkedIn Learning", year: "2025", logo: "linkedin.png", status: "obtenu" },
+    { title: "Power BI Data Analyst Associate", org: "Microsoft", year: "2026", logo: "microsoft.png", status: "en_cours" },
+    { title: "Data Engineer Associate", org: "Datacamp", year: "2026", logo: "datacamp.png", status: "en_cours" },
+    { title: "Snowflake Data Warehouse", org: "Snowflake", year: "2026", logo: "snowflake.png", status: "en_cours" },
   ];
   return (
     <div style={{ padding: mob ? "2.5rem 1.5rem" : "3.5rem 2.5rem", maxWidth: "960px", margin: "0 auto" }}>
