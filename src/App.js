@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import photo from './Profil_Vanessa-bg.png';
+import { Input } from "./components/ui/input";
+import { Textarea } from "./components/ui/textarea";
+import { Label } from "./components/ui/label";
 
 const C = {
   bg: "#080d1a", bg2: "#0d1220", bg3: "#111827",
   pink: "#FE4BC1", pinkDim: "rgba(254,75,193,0.1)", pinkBorder: "rgba(254,75,193,0.22)",
-  white: "#f1f5f9", gray: "#475569", gray2: "#94a3b8", border: "#1a2035", radius: "14px",
+  white: "#f1f5f9", gray: "#475569", gray2: "#94a3b8", border: "#1a2035",
 };
 
 function useW() {
@@ -17,136 +20,177 @@ function useW() {
   return w;
 }
 
-const Badge = ({ children }) => <span style={{ color: C.gray2, fontSize: "0.78rem", fontWeight: 400 }}>{children}</span>;
-const Tag = ({ children }) => <span style={{ color: C.gray2, fontSize: "0.75rem", fontWeight: 400 }}>{children}</span>;
-const SectionLabel = ({ children }) => <p style={{ fontSize: "0.72rem", color: C.pink, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: "0.5rem", fontWeight: 600 }}>{children}</p>;
+const Tag = ({ children }) => (
+  <span style={{
+    color: C.gray2, fontSize: "0.71rem", fontWeight: 500,
+    background: "rgba(148,163,184,0.07)", padding: "0.18rem 0.55rem",
+    borderRadius: "5px", border: "1px solid rgba(148,163,184,0.1)",
+    display: "inline-block", lineHeight: 1.6,
+  }}>{children}</span>
+);
 
+const SectionLabel = ({ children }) => (
+  <p style={{
+    fontSize: "0.68rem", color: C.pink, textTransform: "uppercase",
+    letterSpacing: "0.16em", marginBottom: "0.5rem", fontWeight: 700,
+  }}>{children}</p>
+);
+
+const Btn = ({ onClick, children, style: s }) => (
+  <button onClick={onClick} style={{
+    cursor: "pointer", fontFamily: "inherit", letterSpacing: "-0.02em",
+    transition: "all 0.18s", ...s,
+  }}>{children}</button>
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
 function AboutPage({ setPage }) {
   const w = useW();
   const mob = w < 768;
   const skills = ["Power BI · DAX", "Python · Pandas", "SQL · PL/SQL", "Snowflake", "Machine Learning", "Talend · ETL", "BigQuery · GCP", "Scikit-learn"];
 
-  return (
-    <div>
-      {/* ── HERO ── */}
+  const HeroText = ({ mobile }) => (
+    <div style={mobile
+      ? { padding: "2.5rem 1.5rem 3.5rem", textAlign: "center", zIndex: 1 }
+      : { flex: "0 0 50%", display: "flex", flexDirection: "column", justifyContent: "center", padding: "4rem 0 4rem 3.5rem", zIndex: 1 }
+    }>
+      <p style={{ fontSize: "1.55rem", color: C.gray2, marginBottom: "0.75rem", fontWeight: 500 }}>
+        Bonjour, je suis
+      </p>
+      <h1 style={{
+        fontSize: mobile ? "2.8rem" : "clamp(1.8rem, 4.2vw, 4.8rem)",
+        fontWeight: 800, lineHeight: 0.97, marginBottom: "0.75rem", letterSpacing: "-0.03em",
+      }}>
+        Vanessa<br />
+        <span style={{ color: C.pink }}>Kenfack</span><br />
+        <span style={{ color: C.gray2, fontWeight: 300 }}>Temgoua</span>
+      </h1>
+      <p style={{ fontSize: mobile ? "0.9rem" : "1.55rem", color: C.gray2, fontWeight: 500, marginBottom: "0.6rem" }}>
+        Data Analyst · Consultante BI &amp; Machine Learning
+      </p>
       <div style={{
-        minHeight: mob ? "auto" : "88vh",
-        display: "flex",
-        flexDirection: mob ? "column" : "row",
-        alignItems: "stretch",
-        overflow: "hidden",
-        position: "relative",
+        display: "flex", alignItems: "center", gap: "0.3rem",
+        color: C.gray, fontSize: "0.93rem", marginBottom: "2.10rem",
+        justifyContent: mobile ? "center" : "flex-start",
       }}>
 
-        {/* Décorations */}
-        <div style={{ position: "absolute", top: "15%", left: "52%", width: "10px", height: "10px", borderRadius: "50%", background: C.pink, opacity: 0.7, zIndex: 2, pointerEvents: "none" }} />
-        <div style={{ position: "absolute", bottom: "8%", right: "1%", width: "14px", height: "14px", borderRadius: "50%", background: C.pink, opacity: 0.45, zIndex: 2, pointerEvents: "none" }} />
-        <div style={{ position: "absolute", bottom: "-80px", left: "-80px", width: "200px", height: "200px", borderRadius: "50%", background: C.pink, opacity: 0.08, zIndex: 0, pointerEvents: "none" }} />
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+      </svg>
+      <span>Basée en France </span>
+      </div>
+
+      {/* CTA buttons */}
+      <div style={{
+        display: "flex", gap: "0.75rem", flexWrap: "wrap",
+        marginBottom: mobile ? "2rem" : "2.5rem",
+        justifyContent: mobile ? "center" : "flex-start",
+      }}>
+        <Btn
+          onClick={() => setPage("projets")}
+          style={{
+            background: C.pink, color: "#fff", border: "none",
+            padding: "0.75rem 1.75rem", borderRadius: "12px",
+            fontSize: "0.88rem", fontWeight: 700,
+            display: "flex", alignItems: "center", gap: "0.5rem",
+            boxShadow: "0 4px 20px rgba(254,75,193,0.4)",
+          }}
+        >
+          <span style={{ width: "7px", height: "7px", background: "#fff", borderRadius: "50%", display: "inline-block" }} />
+          Voir mes projets
+        </Btn>
+        <Btn
+          onClick={() => setPage("contact")}
+          style={{
+            background: "transparent", color: C.white,
+            border: "1px solid rgba(241,245,249,0.15)",
+            padding: "0.75rem 1.75rem", borderRadius: "12px", fontSize: "0.88rem",
+          }}
+        >
+          Me contacter
+        </Btn>
+      </div>
+
+      {/* Stats */}
+      <div style={{
+        display: "flex", gap: mobile ? "2rem" : "2.5rem",
+        paddingTop: "1.75rem", borderTop: "1px solid rgba(26,32,53,0.8)",
+        justifyContent: mobile ? "center" : "flex-start",
+      }}>
+        {(mobile
+          ? [["2+", "Ans exp."], ["5+", "Projets"], ["95%", "Fiabilité"]]
+          : [["2+", "Ans d'expérience"], ["5+", "Projets réalisés"], ["95%", "Fiabilité données"]]
+        ).map(([val, lbl]) => (
+          <div key={lbl} style={{ textAlign: mobile ? "center" : "left" }}>
+            <div style={{ fontSize: mobile ? "1.7rem" : "1.9rem", fontWeight: 800, color: C.pink, lineHeight: 1 }}>{val}</div>
+            <div style={{ fontSize: "0.62rem", color: C.gray, textTransform: "uppercase", letterSpacing: "0.08em", marginTop: "0.25rem" }}>{lbl}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div>
+      {/* HERO */}
+      <div style={{
+        minHeight: mob ? "auto" : "90vh",
+        display: "flex", flexDirection: mob ? "column" : "row",
+        alignItems: "stretch", overflow: "hidden", position: "relative",
+      }}>
+        <div style={{ position: "absolute", top: "13%", left: "52%", width: "8px", height: "8px", borderRadius: "50%", background: C.pink, opacity: 0.65, zIndex: 2, pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: "9%", right: "2%", width: "12px", height: "12px", borderRadius: "50%", background: C.pink, opacity: 0.4, zIndex: 2, pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: "-100px", left: "-100px", width: "320px", height: "320px", borderRadius: "50%", background: C.pink, opacity: 0.05, zIndex: 0, pointerEvents: "none" }} />
         <svg style={{ position: "absolute", bottom: "55px", left: mob ? "30%" : "40%", zIndex: 2, pointerEvents: "none" }} width="160" height="55" viewBox="0 0 160 55">
-          <path d="M0,45 Q80,-15 160,45" stroke="#FE4BC1" strokeWidth="1.5" fill="none" opacity="0.45" />
+          <path d="M0,45 Q80,-15 160,45" stroke="#FE4BC1" strokeWidth="1.5" fill="none" opacity="0.4" />
         </svg>
         <svg style={{ position: "absolute", bottom: "50px", left: mob ? "calc(30% + 75px)" : "calc(40% + 75px)", zIndex: 3, pointerEvents: "none" }} width="14" height="14" viewBox="0 0 14 14">
           <path d="M7,0 L8,5.5 L14,7 L8,8.5 L7,14 L6,8.5 L0,7 L6,5.5 Z" fill="#FE4BC1" />
         </svg>
 
-        {/* ── TEXTE ── */}
         {mob ? (
-          /* Mobile : photo d'abord (en haut), puis texte */
           <>
-            {/* Photo mobile */}
-            <div style={{ width: "100%", height: "56vw", overflow: "hidden", position: "relative", flexShrink: 0 }}>
+            <div style={{ width: "100%", height: "60vw", overflow: "hidden", flexShrink: 0, position: "relative" }}>
               <img src={photo} alt="Vanessa Kenfack" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 10%" }} />
+              <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "80px", background: `linear-gradient(transparent, ${C.bg})`, pointerEvents: "none" }} />
             </div>
-            {/* Texte mobile */}
-            <div style={{ padding: "2rem 1.5rem 3rem", textAlign: "center", zIndex: 1 }}>
-              <div style={{ display: "flex", justifyContent: "center", gap: "0", flexWrap: "wrap", marginBottom: "1rem", color: C.gray, fontSize: "0.78rem" }}>
-                {["Data Analyst", "Power BI", "Python · SQL", "Machine Learning"].map((b, i, arr) => (
-                  <span key={b}>{b}{i < arr.length - 1 && <span style={{ margin: "0 0.5rem", color: C.border }}>·</span>}</span>
-                ))}
-              </div>
-              <h1 style={{ fontSize: "2.6rem", fontWeight: 800, lineHeight: 1.0, marginBottom: "1rem" }}>
-                Vanessa<br /><span style={{ color: C.pink }}>Kenfack</span><br />
-                <span style={{ color: C.gray2, fontWeight: 300 }}>Temgoua</span>
-              </h1>
-              <p style={{ color: C.gray2, fontSize: "0.95rem", lineHeight: 1.8, marginBottom: "2rem" }}>
-                Je transforme des données brutes en décisions concrètes. Chaque pipeline que je construis, chaque modèle que j'entraîne, chaque dashboard que je livre a un seul objectif : créer de la valeur métier mesurable.
-              </p>
-              <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "2rem" }}>
-                <button onClick={() => setPage("projets")} style={{ background: C.pink, color: "#fff", border: "none", padding: "0.8rem 1.75rem", borderRadius: "20px", fontSize: "0.88rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  <span style={{ width: "7px", height: "7px", background: "#fff", borderRadius: "50%", display: "inline-block" }} />Voir mes projets
-                </button>
-                <button onClick={() => setPage("contact")} style={{ background: "transparent", color: C.white, border: `0.5px solid ${C.border}`, padding: "0.8rem 1.75rem", borderRadius: "20px", fontSize: "0.88rem", cursor: "pointer" }}>Me contacter</button>
-              </div>
-              <div style={{ display: "flex", gap: "2rem", justifyContent: "center", paddingTop: "1.5rem", borderTop: `0.5px solid ${C.border}` }}>
-                {[["2+", "Ans exp."], ["5+", "Projets"], ["95%", "Fiabilité"]].map(([val, lbl]) => (
-                  <div key={lbl}>
-                    <div style={{ fontSize: "1.6rem", fontWeight: 800, color: C.pink }}>{val}</div>
-                    <div style={{ fontSize: "0.65rem", color: C.gray, textTransform: "uppercase", letterSpacing: "0.06em" }}>{lbl}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <HeroText mobile />
           </>
         ) : (
-          /* Desktop : texte gauche | photo droite */
           <>
-            {/* Texte desktop */}
-            <div style={{ flex: "0 0 50%", display: "flex", flexDirection: "column", justifyContent: "center", padding: "4rem 0 4rem 3.5rem", zIndex: 1 }}>
-              <div style={{ display: "flex", gap: "0", flexWrap: "wrap", marginBottom: "1.2rem", color: C.gray, fontSize: "0.8rem" }}>
-                {["Data Analyst", "Power BI", "Python · SQL", "Machine Learning"].map((b, i, arr) => (
-                  <span key={b}>{b}{i < arr.length - 1 && <span style={{ margin: "0 0.5rem", color: C.border }}>·</span>}</span>
-                ))}
-              </div>
-              <h1 style={{ fontSize: "clamp(3.2rem, 5.5vw, 5.2rem)", fontWeight: 800, lineHeight: 1.0, marginBottom: "1rem" }}>
-                Vanessa<br /><span style={{ color: C.pink }}>Kenfack</span><br />
-                <span style={{ color: C.gray2, fontWeight: 300 }}>Temgoua</span>
-              </h1>
-              <p style={{ color: C.gray2, fontSize: "1rem", lineHeight: 1.8, maxWidth: "380px", marginBottom: "2rem" }}>
-                Je transforme des données brutes en décisions concrètes. Chaque pipeline que je construis, chaque modèle que j'entraîne, chaque dashboard que je livre a un seul objectif : créer de la valeur métier mesurable.
-              </p>
-              <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: "2.5rem" }}>
-                <button onClick={() => setPage("projets")} style={{ background: C.pink, color: "#fff", border: "none", padding: "0.8rem 2rem", borderRadius: "20px", fontSize: "0.9rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  <span style={{ width: "7px", height: "7px", background: "#fff", borderRadius: "50%", display: "inline-block" }} />Voir mes projets
-                </button>
-                <button onClick={() => setPage("contact")} style={{ background: "transparent", color: C.white, border: `0.5px solid ${C.border}`, padding: "0.8rem 2rem", borderRadius: "20px", fontSize: "0.9rem", cursor: "pointer" }}>Me contacter</button>
-              </div>
-              <div style={{ display: "flex", gap: "2.5rem", paddingTop: "2rem", borderTop: `0.5px solid ${C.border}` }}>
-                {[["2+", "Ans d'expérience"], ["5+", "Projets réalisés"], ["95%", "Fiabilité données"]].map(([val, lbl]) => (
-                  <div key={lbl}>
-                    <div style={{ fontSize: "1.8rem", fontWeight: 800, color: C.pink }}>{val}</div>
-                    <div style={{ fontSize: "0.7rem", color: C.gray, textTransform: "uppercase", letterSpacing: "0.06em" }}>{lbl}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Photo desktop — collée au texte, alignée en haut */}
-            <div style={{ flex: "0 0 50%", position: "relative", display: "flex", alignItems: "flex-start", justifyContent: "flex-start", overflow: "hidden" }}>
-              <img src={photo} alt="Vanessa Kenfack"
-                style={{ width: "80%", height: "80%", objectFit: "cover", objectPosition: "center 10%", display: "block" }}
-                onError={e => { e.target.style.display = "none"; e.target.parentNode.innerHTML += '<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:4rem;font-weight:800;color:#FE4BC1">VK</div>'; }}
+            <HeroText mobile={false} />
+            <div style={{ flex: "0 0 50%", position: "relative", overflow: "hidden" }}>
+              <img
+                src={photo} alt="Vanessa Kenfack"
+                style={{ width: "80%", height: "88%", objectFit: "cover", objectPosition: "center 8%", display: "block", marginTop: "6%" }}
+                onError={e => { e.target.style.display = "none"; e.target.parentNode.innerHTML += '<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:5rem;font-weight:800;color:#FE4BC1">VK</div>'; }}
               />
+              <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "140px", background: `linear-gradient(transparent, ${C.bg})`, pointerEvents: "none" }} />
             </div>
           </>
         )}
       </div>
 
-      {/* ── PROFIL ── */}
-      <div style={{ padding: mob ? "3rem 1.5rem" : "4rem 2.5rem", background: C.bg2, borderTop: `0.5px solid ${C.border}` }}>
-        <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+      {/* PROFIL */}
+      <div style={{ padding: mob ? "3.5rem 1.5rem" : "5rem 2.5rem", background: C.bg2, borderTop: "1px solid rgba(26,32,53,0.6)" }}>
+        <div style={{ maxWidth: "960px", margin: "0 auto" }}>
           <SectionLabel>À propos</SectionLabel>
-          <h2 style={{ fontSize: "1.9rem", fontWeight: 700, marginBottom: "2rem" }}>Profil</h2>
-          <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: mob ? "2rem" : "3rem", alignItems: "start" }}>
+          <h2 style={{ fontSize: "1.9rem", fontWeight: 700, marginBottom: "2.5rem" }}>Profil</h2>
+          <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: mob ? "2.5rem" : "4rem", alignItems: "start" }}>
             <div>
-              <p style={{ color: C.gray2, lineHeight: 1.85, marginBottom: "1rem" }}>Data Analyst avec 2 ans d'expérience en environnements industriels et médicaux, je produis des analyses avancées, des tableaux de bord décisionnels et des modèles Machine Learning.</p>
-              <p style={{ color: C.gray2, lineHeight: 1.85, marginBottom: "1rem" }}>Maîtrisant Python et SQL, je traduis des besoins métiers complexes en solutions data concrètes et opérationnelles.</p>
-              <p style={{ color: C.pink, fontSize: "0.85rem", fontWeight: 500 }}>Disponible · Mobile sur Paris et régions</p>
+              <p style={{ color: C.gray2, lineHeight: 1.9, marginBottom: "1.25rem", fontSize: "0.94rem" }}>
+                Data Analyst avec 2 ans d'expérience en environnements industriels et médicaux, je transforme des données brutes en décisions concrètes via SQL, Snowflake, Power BI et Machine Learning. Chaque pipeline que je construis, chaque modèle que j'entraîne, chaque dashboard que je livre a un seul objectif : créer de la valeur métier mesurable.
+              </p>
+              
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span style={{ width: "6px", height: "6px", background: C.pink, borderRadius: "50%", display: "inline-block", boxShadow: `0 0 8px ${C.pink}` }} />
+                <p style={{ color: C.pink, fontSize: "0.87rem", fontWeight: 600 }}>Disponible dès maintenant · Mobilité France entière</p>
+              </div>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.5rem" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem" }}>
               {skills.map(s => (
-                <div key={s} style={{ background: C.bg3, border: `0.5px solid ${C.border}`, padding: "0.6rem 0.85rem", borderRadius: "20px" }}>
-                  <span style={{ fontSize: "0.8rem", color: C.gray2 }}>{s}</span>
-                </div>
+                <SkillPill key={s} label={s} />
               ))}
             </div>
           </div>
@@ -156,6 +200,26 @@ function AboutPage({ setPage }) {
   );
 }
 
+function SkillPill({ label }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <div
+      style={{
+        background: "rgba(17,24,39,0.7)",
+        border: "1px solid rgba(254,75,193,0.08)",
+        padding: "0.65rem 0.9rem", borderRadius: "10px",
+        transition: "all 0.15s", cursor: "default",
+        boxShadow: hov ? "0 4px 16px rgba(0,0,0,0.4)" : "none",
+      }}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+    >
+      <span style={{ fontSize: "0.79rem", color: C.gray2, fontWeight: 500 }}>{label}</span>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 function CVPage() {
   const mob = useW() < 768;
   const exps = [
@@ -164,66 +228,188 @@ function CVPage() {
     { role: "Data Analyst", company: "McCain Foods", period: "Juin – Décembre 2023 · 7 mois", lieu: "Lille", secteur: "Agroalimentaire / Industrie", bullets: ["+100 000 lignes de données de production traitées via Python & SQL", "Contrôles qualité automatisés | 90% de taux de conformité", "2 pipelines ETL avec feature engineering | +25% accélération du traitement", "Analyse prédictive des pannes machines | -12% temps d'arrêt"] },
   ];
   const techGroups = [
-    { label: "BI & Reporting", items: ["Power BI", "DAX", "Power Query", "Tableau", "Excel"] },
-    { label: "SQL & Bases de données", items: ["SQL", "PL/SQL", "PostgreSQL", "Snowflake", "MongoDB"] },
-    { label: "Python", items: ["Pandas", "NumPy", "Scikit-learn", "Matplotlib", "Plotly"] },
-    { label: "Data Engineering", items: ["Talend", "Airflow", "dbt", "BigQuery", "GCP"] },
-    { label: "Machine Learning", items: ["Random Forest", "Régression", "ACP", "Clustering", "TensorFlow"] },
+    { label: "BI & Reporting", items: ["Power BI", "DAX", "Power Query", "Tableau Software", "Excel"] },
+    { label: "SQL & Bases de données", items: ["SQL","NoSQL", "PostgreSQL", "Snowflake", "MongoDB", "MySQL"] },
+    { label: "Python", items: ["Pandas", "NumPy", "Scikit-learn", "Matplotlib", "Plotly", "TensorFlow"] },
+    { label: "Data Engineering", items: ["Talend", "Airflow", "BigQuery", "GCP"] },
+    { label: "Machine Learning", items: ["Random Forest", "Régression", "ACP", "Clustering", "Séries Temporelles"] },
   ];
+
   return (
-    <div style={{ padding: mob ? "2rem 1.5rem" : "3rem 2.5rem", maxWidth: "900px", margin: "0 auto" }}>
+    <div style={{ padding: mob ? "2.5rem 1.5rem" : "3.5rem 2.5rem", maxWidth: "900px", margin: "0 auto" }}>
       <SectionLabel>Curriculum Vitae</SectionLabel>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: mob ? "flex-start" : "center", flexDirection: mob ? "column" : "row", gap: "1rem", marginBottom: "3rem" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: mob ? "flex-start" : "center", flexDirection: mob ? "column" : "row", gap: "1rem", marginBottom: "3.5rem" }}>
         <h2 style={{ fontSize: "1.9rem", fontWeight: 700 }}>Parcours & Compétences</h2>
-        <a href="/CV_Vanessa_Kenfack.pdf"
-            download="CV_Vanessa_Kenfack.pdf"
-            style={{ background: C.pink, color: "#fff", padding: "0.6rem 1.25rem", borderRadius: "20px", fontSize: "0.83rem", textDecoration: "none", fontWeight: 700 }}
-        >
-  Télécharger CV
+        <a href="/CV_Vanessa_Kenfack.pdf" download="CV_Vanessa_Kenfack.pdf" style={{
+          background: C.pink, color: "#fff", padding: "0.55rem 1.3rem",
+          borderRadius: "10px", fontSize: "0.83rem", textDecoration: "none",
+          fontWeight: 700, boxShadow: "0 4px 16px rgba(254,75,193,0.35)",
+          display: "inline-flex", alignItems: "center", gap: "0.4rem",
+        }}>
+          ↓ Télécharger CV
         </a>
       </div>
-      <section style={{ marginBottom: "3rem" }}>
+
+      {/* Experiences */}
+      <section style={{ marginBottom: "3.5rem" }}>
         <SectionLabel>Expériences</SectionLabel>
-        <div style={{ paddingLeft: "1.5rem", borderLeft: `0.5px solid ${C.border}`, marginTop: "1.5rem" }}>
+        <div style={{ paddingLeft: "1.75rem", borderLeft: "2px solid rgba(254,75,193,0.18)", marginTop: "1.75rem" }}>
           {exps.map((exp, i) => (
             <div key={i} style={{ marginBottom: "2.5rem", position: "relative" }}>
-              <div style={{ position: "absolute", left: "-1.85rem", top: "0.3rem", width: "9px", height: "9px", background: C.pink, borderRadius: "50%" }} />
-              <div style={{ fontSize: "0.72rem", color: C.pink, marginBottom: "0.2rem", fontWeight: 500 }}>{exp.period} · {exp.lieu}</div>
-              <div style={{ fontWeight: 700, fontSize: "0.95rem", marginBottom: "0.1rem" }}>{exp.role}</div>
-              <div style={{ fontSize: "0.82rem", color: C.gray2, marginBottom: "0.1rem" }}>{exp.company}</div>
-              <div style={{ fontSize: "0.72rem", color: C.gray, marginBottom: "0.7rem", fontStyle: "italic" }}>Secteur : {exp.secteur}</div>
-              <ul style={{ paddingLeft: "1rem", margin: 0 }}>
-                {exp.bullets.map((b, j) => <li key={j} style={{ color: C.gray2, fontSize: "0.82rem", lineHeight: 1.75, marginBottom: "0.2rem" }}>{b}</li>)}
+              <div style={{
+                position: "absolute", left: "-2.1rem", top: "0.25rem",
+                width: "10px", height: "10px", background: C.pink, borderRadius: "50%",
+                boxShadow: "0 0 0 3px rgba(254,75,193,0.15), 0 0 0 6px rgba(254,75,193,0.05)",
+              }} />
+              <div style={{ fontSize: "0.71rem", color: C.pink, marginBottom: "0.3rem", fontWeight: 600 }}>{exp.period} · {exp.lieu}</div>
+              <div style={{ fontWeight: 700, fontSize: "0.98rem", marginBottom: "0.15rem" }}>{exp.role}</div>
+              <div style={{ fontSize: "0.83rem", color: C.gray2, marginBottom: "0.35rem" }}>{exp.company}</div>
+              <span style={{
+                display: "inline-block", fontSize: "0.68rem", color: C.gray,
+                background: "rgba(71,85,105,0.1)", padding: "0.12rem 0.55rem",
+                borderRadius: "5px", border: "1px solid rgba(71,85,105,0.15)", marginBottom: "0.8rem",
+              }}>{exp.secteur}</span>
+              <ul style={{ paddingLeft: "1.1rem", margin: 0 }}>
+                {exp.bullets.map((b, j) => (
+                  <li key={j} style={{ color: C.gray2, fontSize: "0.83rem", lineHeight: 1.8, marginBottom: "0.2rem" }}>{b}</li>
+                ))}
               </ul>
             </div>
           ))}
         </div>
       </section>
-      <section style={{ marginBottom: "3rem" }}>
+
+      {/* Tech */}
+      <section style={{ marginBottom: "3.5rem" }}>
         <SectionLabel>Outils & Technologies</SectionLabel>
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", marginTop: "1.5rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginTop: "1.5rem" }}>
           {techGroups.map(({ label, items }) => (
-            <div key={label} style={{ background: C.bg2, border: `0.5px solid ${C.border}`, borderRadius: "16px", padding: "0.85rem 1rem", display: "grid", gridTemplateColumns: mob ? "1fr" : "150px 1fr", gap: mob ? "0.4rem" : "1rem", alignItems: "center" }}>
+            <div key={label} style={{
+              background: "rgba(13,18,32,0.5)", border: `1px solid ${C.border}`,
+              borderRadius: "12px", padding: "0.85rem 1.1rem",
+              display: "grid", gridTemplateColumns: mob ? "1fr" : "140px 1fr",
+              gap: mob ? "0.5rem" : "1rem", alignItems: "center",
+            }}>
               <span style={{ fontSize: "0.78rem", color: C.pink, fontWeight: 600 }}>{label}</span>
-              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>{items.map(item => <Tag key={item}>{item}</Tag>)}</div>
+              <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
+                {items.map(item => <Tag key={item}>{item}</Tag>)}
+              </div>
             </div>
           ))}
         </div>
       </section>
+
+      {/* Formation */}
       <section>
         <SectionLabel>Formation</SectionLabel>
         <div style={{ marginTop: "1.25rem" }}>
-          {[["Master Data & Intelligence Artificielle", "Université Catholique de Lille", "2025"], ["Master 1 Data Science", "Université Catholique de Lille", "2022"], ["Licence Réseaux & Systèmes d'Information", "", "2021"]].map(([diploma, school, year]) => (
-            <div key={diploma} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: "0.85rem 0", borderBottom: `0.5px solid ${C.border}`, gap: "1rem" }}>
+          {[
+            ["Master Data & Intelligence Artificielle", "Université Catholique de Lille", "2025"],
+            ["Master 1 Data Science","", "2022"],
+            ["Licence Réseaux & Systèmes d'Information", "", "2021"],
+          ].map(([diploma, school, year]) => (
+            <div key={diploma} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: "1rem 0", borderBottom: `1px solid ${C.border}`, gap: "1rem" }}>
               <div>
-                <div style={{ fontWeight: 500, fontSize: "0.88rem" }}>{diploma}</div>
-                {school && <div style={{ fontSize: "0.78rem", color: C.gray, marginTop: "0.1rem" }}>{school}</div>}
+                <div style={{ fontWeight: 600, fontSize: "0.9rem" }}>{diploma}</div>
+                {school && <div style={{ fontSize: "0.78rem", color: C.gray, marginTop: "0.2rem" }}>{school}</div>}
               </div>
-              <span style={{ fontSize: "0.78rem", color: C.pink, fontWeight: 700, flexShrink: 0 }}>{year}</span>
+              <span style={{
+                fontSize: "0.73rem", color: C.pink, fontWeight: 700, flexShrink: 0,
+                background: C.pinkDim, padding: "0.2rem 0.6rem",
+                borderRadius: "6px", border: `1px solid ${C.pinkBorder}`,
+              }}>{year}</span>
             </div>
           ))}
         </div>
       </section>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+function ProjectCard({ p }) {
+  const [hov, setHov] = useState(false);
+  const hasCapLink = Boolean(p.cap_link && p.cap_link.trim());
+  return (
+    <div
+      style={{
+        background: C.bg2, border: `1px solid ${C.border}`,
+        borderRadius: "16px", overflow: "hidden",
+        transition: "all 0.22s ease",
+        transform: hov ? "translateY(-3px)" : "none",
+        boxShadow: hov ? "0 8px 32px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.3)" : "0 2px 12px rgba(0,0,0,0.25)",
+      }}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+    >
+      {/* Video thumbnail or icon header */}
+      {hasCapLink ? (
+        <a
+          href={p.cap_link}
+          target="_blank"
+          rel="noreferrer noopener"
+          style={{ display: "block", textDecoration: "none", position: "relative" }}
+        >
+          <div style={{ position: "relative", width: "100%", paddingTop: "56.25%", background: C.bg3, borderBottom: `1px solid ${C.border}`, overflow: "hidden" }}>
+            <img
+              src={`https://cap.so/api/video/og?videoId=${p.cap_link.split("/").pop()}`}
+              alt={p.title}
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            />
+            {/* Dark overlay on hover */}
+            <div style={{
+              position: "absolute", inset: 0,
+              background: hov ? "rgba(0,0,0,0.45)" : "rgba(0,0,0,0.25)",
+              transition: "background 0.22s",
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>
+              {/* Play button */}
+              <div style={{
+                width: "48px", height: "48px", borderRadius: "50%",
+                background: hov ? C.pink : "rgba(255,255,255,0.92)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                transition: "all 0.22s",
+                boxShadow: hov ? `0 0 20px rgba(254,75,193,0.6)` : "0 2px 12px rgba(0,0,0,0.4)",
+              }}>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <polygon points="6,3 15,9 6,15" fill={hov ? "#fff" : C.pink} />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </a>
+      ) : (
+        <div style={{
+          height: "86px", display: "flex", alignItems: "center", justifyContent: "center",
+          background: `linear-gradient(145deg, ${C.bg3} 0%, rgba(17,24,39,0.4) 100%)`,
+          borderBottom: `1px solid ${C.border}`, fontSize: "2rem", color: C.pink,
+          position: "relative", overflow: "hidden",
+        }}>
+          <div style={{ position: "absolute", inset: 0, background: hov ? "rgba(241,245,249,0.03)" : "transparent", transition: "all 0.22s" }} />
+          <span style={{ position: "relative", zIndex: 1 }}>{p.icon}</span>
+        </div>
+      )}
+      {/* Body */}
+      <div style={{ padding: "1.1rem" }}>
+        <div style={{ display: "flex", gap: "0.3rem", flexWrap: "wrap", marginBottom: "0.6rem" }}>
+          {p.tags.map(t => <Tag key={t}>{t}</Tag>)}
+        </div>
+        <div style={{ fontWeight: 700, fontSize: "0.88rem", marginBottom: "0.45rem", lineHeight: 1.4 }}>{p.title}</div>
+        <div style={{ fontSize: "0.78rem", color: C.gray2, lineHeight: 1.75, marginBottom: "0.85rem" }}>{p.desc}</div>
+        <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", marginBottom: "0.9rem", paddingTop: "0.65rem", borderTop: `1px solid ${C.border}` }}>
+          {p.metrics.map(m => (
+            <span key={m} style={{
+              color: C.pink, fontSize: "0.67rem", fontWeight: 600,
+              background: C.pinkDim, padding: "0.15rem 0.5rem",
+              borderRadius: "4px", border: `1px solid ${C.pinkBorder}`,
+            }}>{m}</span>
+          ))}
+        </div>
+        <a href="https://github.com/vanessatemgoua/Data-portfolio" target="_blank" rel="noreferrer"
+          style={{ color: C.pink, fontSize: "0.78rem", textDecoration: "none", fontWeight: 600, display: "flex", alignItems: "center", gap: "0.25rem" }}>
+          Voir sur GitHub <span>→</span>
+        </a>
+      </div>
     </div>
   );
 }
@@ -233,41 +419,90 @@ function ProjetsPage() {
   const [filter, setFilter] = useState("Tous");
   const categories = ["Tous", "Power BI", "Python", "Excel"];
   const projects = [
-    { title: "Global Superstore · Sales Performance", tags: ["Power BI", "DAX", "Power Query"], cat: "Power BI", desc: "Dashboard 3 pages : Vue d'ensemble, Analyse Produit, Analyse Géographique. KPIs N/N-1, scatter plot Remise vs Profit.", metrics: ["+51,5% CA", "3 pages", "DAX avancé"], icon: "↗" },
-    { title: "Atlas Labs · HR Analytics", tags: ["Power BI", "DAX", "RH"], cat: "Power BI", desc: "Analyse RH : attrition (16,1%), démographie des effectifs, suivi individuel des performances.", metrics: ["4 pages", "1 470 employés", "16,1% attrition"], icon: "◎" },
-    { title: "Churn Rate · Databel", tags: ["Power BI", "DAX", "CRM"], cat: "Power BI", desc: "Identification des facteurs de désabonnement. Segmentation par profil, type de contrat et usage.", metrics: ["Segmentation", "Power Query", "DAX"], icon: "△" },
-    { title: "Analyse Financière · Apple AAPL", tags: ["Python", "ML", "Finance"], cat: "Python", desc: "Feature engineering (SMA, EMA, RSI, MACD), backtesting stratégie trading, Random Forest vs XGBoost.", metrics: ["RMSE/MAE/R²", "Backtesting", "XGBoost"], icon: "∿" },
-    { title: "HR Analytics · Performances Employés", tags: ["Python", "Pandas", "Stats"], cat: "Python", desc: "Exploration des données RH, détection d'outliers, analyse des corrélations.", metrics: ["50K+ lignes", "ANOVA", "Clustering"], icon: "⬡" },
-    { title: "Analyse des Ventes · Excel", tags: ["Excel", "Power Query", "TCD"], cat: "Excel", desc: "Suivi des performances commerciales par région et catégorie avec tableaux croisés dynamiques.", metrics: ["TCD", "Power Query", "Dashboard"], icon: "▦" },
+    { title: "Global Superstore · Sales Performance", tags: ["Power BI", "DAX", "Power Query"], cat: "Power BI", desc: "Dashboard 3 pages : Vue d'ensemble, Analyse Produit, Analyse Géographique. KPIs N/N-1, scatter plot Remise vs Profit.", metrics: ["+51,5% CA", "3 pages", "DAX avancé"], icon: "↗", cap_link:"https://cap.link/vxse8f0a11wzfrh" },
+    { title: "Atlas Labs · HR Analytics", tags: ["Power BI", "DAX", "RH"], cat: "Power BI", desc: "Analyse RH : attrition (16,1%), démographie des effectifs, suivi individuel des performances.", metrics: ["4 pages", "1 470 employés", "16,1% attrition"], icon: "◎", cap_link:"https://cap.link/q36npy574znk453" },
+    { title: "Churn Rate · Databel", tags: ["Power BI", "DAX", "CRM"], cat: "Power BI", desc: "Identification des facteurs de désabonnement. Segmentation par profil, type de contrat et usage.", metrics: ["Segmentation", "Power Query", "DAX"], icon: "△", cap_link:"" },
+    { title: "Analyse Financière · Apple AAPL", tags: ["Python", "ML", "Finance"], cat: "Python", desc: "Feature engineering (SMA, EMA, RSI, MACD), backtesting stratégie trading, Random Forest vs XGBoost.", metrics: ["RMSE/MAE/R²", "Backtesting", "XGBoost"], icon: "∿", cap_link:"" },
+    { title: "HR Analytics · Performances Employés", tags: ["Python", "Pandas", "Stats"], cat: "Python", desc: "Exploration des données RH, détection d'outliers, analyse des corrélations.", metrics: ["50K+ lignes", "ANOVA", "Clustering"], icon: "⬡", cap_link:"" },
+    { title: "Analyse des Ventes · Excel", tags: ["Excel", "Power Query", "TCD"], cat: "Excel", desc: "Suivi des performances commerciales par région et catégorie avec tableaux croisés dynamiques.", metrics: ["TCD", "Power Query", "Dashboard"], icon: "▦", cap_link:"" },
   ];
   const filtered = filter === "Tous" ? projects : projects.filter(p => p.cat === filter);
+
   return (
-    <div style={{ padding: mob ? "2rem 1.5rem" : "3rem 2.5rem", maxWidth: "1000px", margin: "0 auto" }}>
+    <div style={{ padding: mob ? "2.5rem 1.5rem" : "3.5rem 2.5rem", maxWidth: "1050px", margin: "0 auto" }}>
       <SectionLabel>Portfolio</SectionLabel>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: mob ? "flex-start" : "center", flexDirection: mob ? "column" : "row", gap: "1rem", marginBottom: "2rem" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: mob ? "flex-start" : "center", flexDirection: mob ? "column" : "row", gap: "1.25rem", marginBottom: "2.5rem" }}>
         <h2 style={{ fontSize: "1.9rem", fontWeight: 700 }}>Projets</h2>
-        <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
           {categories.map(cat => (
-            <button key={cat} onClick={() => setFilter(cat)} style={{ background: filter === cat ? C.pink : "transparent", color: filter === cat ? "#fff" : C.gray2, border: `0.5px solid ${filter === cat ? C.pink : C.border}`, padding: "0.38rem 0.85rem", borderRadius: "20px", fontSize: "0.78rem", cursor: "pointer", fontWeight: filter === cat ? 700 : 400 }}>{cat}</button>
+            <Btn key={cat} onClick={() => setFilter(cat)} style={{
+              background: filter === cat ? C.pink : "transparent",
+              color: filter === cat ? "#fff" : C.gray2,
+              border: `1px solid ${filter === cat ? C.pink : C.border}`,
+              padding: "0.38rem 1rem", borderRadius: "100px",
+              fontSize: "0.78rem", fontWeight: filter === cat ? 600 : 400,
+            }}>{cat}</Btn>
           ))}
         </div>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "repeat(auto-fill, minmax(280px, 1fr))", gap: "1rem" }}>
-        {filtered.map(p => (
-          <div key={p.title} style={{ background: C.bg2, border: `0.5px solid ${C.border}`, borderRadius: "18px", overflow: "hidden" }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = C.pinkBorder}
-            onMouseLeave={e => e.currentTarget.style.borderColor = C.border}
-          >
-            <div style={{ height: "90px", display: "flex", alignItems: "center", justifyContent: "center", background: C.bg3, borderBottom: `0.5px solid ${C.border}`, fontSize: "2rem", color: C.pink, fontWeight: 300 }}>{p.icon}</div>
-            <div style={{ padding: "1rem" }}>
-              <div style={{ display: "flex", gap: "0.3rem", flexWrap: "wrap", marginBottom: "0.6rem" }}>{p.tags.map(t => <Tag key={t}>{t}</Tag>)}</div>
-              <div style={{ fontWeight: 700, fontSize: "0.9rem", marginBottom: "0.4rem" }}>{p.title}</div>
-              <div style={{ fontSize: "0.78rem", color: C.gray2, lineHeight: 1.7, marginBottom: "0.7rem" }}>{p.desc}</div>
-              <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap", marginBottom: "0.7rem" }}>{p.metrics.map(m => <span key={m} style={{ color: C.gray, fontSize: "0.66rem" }}>{m}</span>)}</div>
-              <a href="https://github.com/vanessatemgoua/Data-portfolio" target="_blank" rel="noreferrer" style={{ color: C.pink, fontSize: "0.78rem", textDecoration: "none", fontWeight: 500 }}>Voir sur GitHub →</a>
-            </div>
-          </div>
-        ))}
+      <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.1rem" }}>
+        {filtered.map(p => <ProjectCard key={p.title} p={p} />)}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+function CertCard({ c }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <div
+      style={{
+        background: C.bg2, border: `1px solid ${C.border}`,
+        borderRadius: "16px", padding: "1.4rem",
+        transition: "all 0.22s ease",
+        transform: hov ? "translateY(-3px)" : "none",
+        boxShadow: hov ? "0 8px 32px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.3)" : "0 2px 8px rgba(0,0,0,0.2)",
+        position: "relative", overflow: "hidden",
+      }}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+    >
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0, height: "2px",
+        background: hov ? "rgba(241,245,249,0.06)" : "transparent",
+        transition: "all 0.22s",
+      }} />
+      <div style={{
+        width: "44px", height: "44px", borderRadius: "10px",
+        background: "#fff", padding: "6px",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        marginBottom: "0.9rem", overflow: "hidden",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+      }}>
+        <img src={c.logo} alt={c.org} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+      </div>
+      <div style={{ fontWeight: 700, fontSize: "0.92rem", marginBottom: "0.3rem", lineHeight: 1.3 }}>{c.title}</div>
+      <div style={{ fontSize: "0.78rem", color: C.gray, marginBottom: "1.1rem" }}>{c.org}</div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span style={{
+          fontSize: "0.72rem", color: C.pink, fontWeight: 700,
+          background: C.pinkDim, padding: "0.2rem 0.6rem",
+          borderRadius: "6px", border: `1px solid ${C.pinkBorder}`,
+        }}>{c.year}</span>
+      {c.status === "en_cours" ? (
+      <span style={{
+        color: "#a1a1a1", fontSize: "0.66rem", fontWeight: 600,
+        background: "rgba(221, 225, 222, 0.1)", padding: "0.18rem 0.55rem",
+        borderRadius: "5px", border: "1px solid rgba(120, 120, 118, 0.25)",
+      }}>En cours...</span>
+      ) : (
+      <span style={{
+        color: "#a1a1a1", fontSize: "0.66rem", fontWeight: 600,
+        background: "rgba(221, 225, 222, 0.1)", padding: "0.18rem 0.55rem",
+        borderRadius: "5px", border: "1px solid rgba(120, 120, 118, 0.25)",
+      }}>Obtenu ✓</span>
+    )}
       </div>
     </div>
   );
@@ -276,89 +511,139 @@ function ProjetsPage() {
 function CertificationsPage() {
   const mob = useW() < 768;
   const certs = [
-    { title: "Power BI Data Analyst Associate", org: "Microsoft", year: "2024", icon: "▲" },
-    { title: "Google Data Analytics", org: "Google / Coursera", year: "2023", icon: "◆" },
-    { title: "Python for Data Science", org: "IBM / Coursera", year: "2023", icon: "●" },
-    { title: "SQL for Data Science", org: "UC Davis / Coursera", year: "2023", icon: "■" },
-    { title: "Machine Learning Specialization", org: "Stanford / Coursera", year: "2024", icon: "◈" },
-    { title: "Snowflake Data Warehouse", org: "Snowflake", year: "2025", icon: "❄" },
+    { title: "Data Analyst Associate", org: "Datacamp", year: "2025", logo: "https://logo.clearbit.com/datacamp.com", status: "obtenu" },
+    { title: "Data Analytics Job Simulation", org: "Forage", year: "2025", logo: "https://logo.clearbit.com/theforage.com", status: "obtenu" },
+    { title: "L'essentiel de Google Cloud Platform", org: "LinkedIn Learning", year: "2025", logo: "https://logo.clearbit.com/linkedin.com", status: "obtenu" },
+    { title: "Python pour la finance", org: "LinkedIn Learning", year: "2025", logo: "https://logo.clearbit.com/linkedin.com", status: "obtenu" },
+    { title: "Power BI Data Analyst Associate", org: "Microsoft", year: "2026", logo: "https://logo.clearbit.com/microsoft.com", status: "en_cours" },
+    { title: "Data Engineer Associate", org: "Datacamp", year: "2026", logo: "https://logo.clearbit.com/datacamp.com", status: "en_cours" },
+    { title: "Snowflake Data Warehouse", org: "Snowflake", year: "2026", logo: "https://logo.clearbit.com/snowflake.com", status: "en_cours" },
   ];
   return (
-    <div style={{ padding: mob ? "2rem 1.5rem" : "3rem 2.5rem", maxWidth: "900px", margin: "0 auto" }}>
+    <div style={{ padding: mob ? "2.5rem 1.5rem" : "3.5rem 2.5rem", maxWidth: "960px", margin: "0 auto" }}>
       <SectionLabel>Formations</SectionLabel>
-      <h2 style={{ fontSize: "1.9rem", fontWeight: 700, marginBottom: "0.75rem" }}>Certifications</h2>
-      <p style={{ color: C.gray2, marginBottom: "2.5rem" }}>Certifications professionnelles obtenues pour valider mes compétences data.</p>
-      <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "repeat(auto-fill, minmax(260px, 1fr))", gap: "1rem" }}>
-        {certs.map(c => (
-          <div key={c.title} style={{ background: C.bg2, border: `0.5px solid ${C.border}`, borderRadius: "18px", padding: "1.25rem" }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = C.pinkBorder}
-            onMouseLeave={e => e.currentTarget.style.borderColor = C.border}
-          >
-            <div style={{ fontSize: "1.5rem", color: C.pink, marginBottom: "0.75rem" }}>{c.icon}</div>
-            <div style={{ fontWeight: 600, fontSize: "0.9rem", marginBottom: "0.25rem" }}>{c.title}</div>
-            <div style={{ fontSize: "0.78rem", color: C.gray, marginBottom: "0.75rem" }}>{c.org}</div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: "0.75rem", color: C.pink, fontWeight: 700 }}>{c.year}</span>
-              <span style={{ color: C.gray2, fontSize: "0.65rem" }}>Obtenu</span>
-            </div>
-          </div>
-        ))}
+      <h2 style={{ fontSize: "1.9rem", fontWeight: 700, marginBottom: "0.6rem" }}>Certifications</h2>
+      <p style={{ color: C.gray2, marginBottom: "2.5rem", fontSize: "0.94rem" }}>Certifications professionnelles obtenues pour valider mes compétences data.</p>
+      <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "repeat(auto-fill, minmax(270px, 1fr))", gap: "1.1rem" }}>
+        {certs.map(c => <CertCard key={c.title} c={c} />)}
       </div>
     </div>
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
 function ContactPage() {
   const mob = useW() < 768;
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
+
+  const fieldStyle = {
+    width: "100%", background: "rgba(13,18,32,0.8)",
+    border: `1px solid ${C.border}`, borderRadius: "10px",
+    padding: "0.72rem 1rem", color: C.white, fontSize: "0.87rem",
+    outline: "none", boxSizing: "border-box",
+    fontFamily: "inherit", letterSpacing: "-0.02em",
+    transition: "border-color 0.15s",
+  };
+
   return (
-    <div style={{ padding: mob ? "2rem 1.5rem" : "3rem 2.5rem", maxWidth: "800px", margin: "0 auto" }}>
+    <div style={{ padding: mob ? "2.5rem 1.5rem" : "3.5rem 2.5rem", maxWidth: "820px", margin: "0 auto" }}>
       <SectionLabel>Contact</SectionLabel>
-      <h2 style={{ fontSize: "1.9rem", fontWeight: 700, marginBottom: "0.75rem" }}>Travaillons ensemble</h2>
-      <p style={{ color: C.gray2, marginBottom: "3rem" }}>Data Analyst disponible pour missions, CDI ou freelance. Mobile sur Paris et régions.</p>
-      <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: "2.5rem" }}>
+      <h2 style={{ fontSize: "1.9rem", fontWeight: 700, marginBottom: "0.6rem" }}>Travaillons ensemble</h2>
+      <p style={{ color: C.gray2, marginBottom: "3rem", fontSize: "0.94rem" }}>Data Analyst disponible pour missions, CDI ou freelance. Mobile sur Paris et régions.</p>
+      <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1.15fr", gap: mob ? "2.5rem" : "3.5rem" }}>
+
+        {/* Contact info */}
         <div>
           <h3 style={{ fontSize: "0.9rem", fontWeight: 600, marginBottom: "1.5rem" }}>Coordonnées</h3>
-          {[{ label: "Email", val: "vanessa.kenfack@outlook.fr", href: "mailto:vanessa.kenfack@outlook.fr" }, { label: "Téléphone", val: "+33 7 45 68 30 36", href: "tel:+33745683036" }, { label: "Localisation", val: "France · Mobile Paris", href: null }].map(({ label, val, href }) => (
-            <div key={label} style={{ display: "flex", gap: "0.75rem", padding: "0.85rem 0", borderBottom: `0.5px solid ${C.border}` }}>
-              <span style={{ color: C.pink, fontSize: "0.85rem", marginTop: "0.05rem" }}>→</span>
+          {[
+            { label: "Email", val: "vanessa.kenfack@outlook.fr", href: "mailto:vanessa.kenfack@outlook.fr" },
+            { label: "Téléphone", val: "+33 7 45 68 30 36", href: "tel:+33745683036" },
+            { label: "Localisation", val: "France Entière", href: null },
+          ].map(({ label, val, href }) => (
+            <div key={label} style={{ display: "flex", gap: "0.85rem", padding: "0.9rem 0", borderBottom: `1px solid ${C.border}` }}>
+              <div style={{
+                width: "30px", height: "30px", borderRadius: "8px",
+                background: C.pinkDim, border: `1px solid ${C.pinkBorder}`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                flexShrink: 0, marginTop: "0.05rem",
+              }}>
+                <span style={{ color: C.pink, fontSize: "0.8rem" }}>→</span>
+              </div>
               <div>
-                <div style={{ fontSize: "0.7rem", color: C.gray, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.1rem" }}>{label}</div>
-                {href ? <a href={href} style={{ color: C.pink, fontSize: "0.83rem", textDecoration: "none" }}>{val}</a> : <div style={{ color: C.gray2, fontSize: "0.83rem" }}>{val}</div>}
+                <div style={{ fontSize: "0.67rem", color: C.gray, textTransform: "uppercase", letterSpacing: "0.09em", marginBottom: "0.2rem" }}>{label}</div>
+                {href
+                  ? <a href={href} style={{ color: C.pink, fontSize: "0.84rem", textDecoration: "none", fontWeight: 500 }}>{val}</a>
+                  : <div style={{ color: C.gray2, fontSize: "0.84rem" }}>{val}</div>}
               </div>
             </div>
           ))}
-          <div style={{ display: "flex", gap: "0.5rem", marginTop: "1.5rem" }}>
+          <div style={{ display: "flex", gap: "0.6rem", marginTop: "1.5rem" }}>
             {[{ label: "LinkedIn", href: "http://www.linkedin.com/in/vanessa-kenfack-temgoua-028937248" }, { label: "GitHub", href: "https://github.com/vanessatemgoua" }].map(({ label, href }) => (
-              <a key={label} href={href} target="_blank" rel="noreferrer" style={{ color: C.gray2, border: `0.5px solid ${C.border}`, padding: "0.45rem 0.9rem", borderRadius: "20px", fontSize: "0.8rem", textDecoration: "none" }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = C.pinkBorder; e.currentTarget.style.color = C.white; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.gray2; }}
+              <a key={label} href={href} target="_blank" rel="noreferrer"
+                style={{ color: C.gray2, border: `1px solid ${C.border}`, padding: "0.5rem 1rem", borderRadius: "8px", fontSize: "0.8rem", textDecoration: "none", fontWeight: 500, transition: "all 0.15s" }}
+                onMouseEnter={e => { e.currentTarget.style.color = C.white; e.currentTarget.style.borderColor = "rgba(241,245,249,0.2)"; }}
+                onMouseLeave={e => { e.currentTarget.style.color = C.gray2; e.currentTarget.style.borderColor = C.border; }}
               >{label}</a>
             ))}
           </div>
         </div>
+
+        {/* Form */}
         <div>
           {sent ? (
-            <div style={{ background: C.pinkDim, border: `0.5px solid ${C.pinkBorder}`, borderRadius: "18px", padding: "2rem", textAlign: "center" }}>
-              <div style={{ color: C.pink, fontSize: "1.5rem", marginBottom: "0.75rem" }}>✓</div>
-              <div style={{ fontWeight: 700, marginBottom: "0.5rem" }}>Message envoyé !</div>
-              <div style={{ color: C.gray2, fontSize: "0.83rem" }}>Je vous répondrai dans les plus brefs délais.</div>
-              <button onClick={() => { setSent(false); setForm({ name: "", email: "", subject: "", message: "" }); }} style={{ marginTop: "1rem", background: "transparent", color: C.pink, border: `0.5px solid ${C.pinkBorder}`, padding: "0.45rem 0.9rem", borderRadius: "20px", fontSize: "0.8rem", cursor: "pointer" }}>Nouveau message</button>
+            <div style={{ background: C.pinkDim, border: `1px solid ${C.pinkBorder}`, borderRadius: "16px", padding: "2.5rem", textAlign: "center" }}>
+              <div style={{ color: C.pink, fontSize: "2rem", marginBottom: "0.75rem" }}>✓</div>
+              <div style={{ fontWeight: 700, fontSize: "1.05rem", marginBottom: "0.5rem" }}>Message envoyé !</div>
+              <div style={{ color: C.gray2, fontSize: "0.84rem", lineHeight: 1.7 }}>Je vous répondrai dans les plus brefs délais.</div>
+              <button onClick={() => { setSent(false); setForm({ name: "", email: "", subject: "", message: "" }); }}
+                style={{ marginTop: "1.25rem", background: "transparent", color: C.pink, border: `1px solid ${C.pinkBorder}`, padding: "0.5rem 1.1rem", borderRadius: "8px", fontSize: "0.82rem", cursor: "pointer", fontFamily: "inherit" }}>
+                Nouveau message
+              </button>
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.7rem" }}>
-              {[{ key: "name", label: "Nom complet", placeholder: "Votre nom", type: "text" }, { key: "email", label: "Email", placeholder: "votre@email.com", type: "email" }, { key: "subject", label: "Sujet", placeholder: "Objet du message", type: "text" }].map(({ key, label, placeholder, type }) => (
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+              {[
+                { key: "name", label: "Nom complet", placeholder: "Votre nom", type: "text" },
+                { key: "email", label: "Email", placeholder: "votre@email.com", type: "email" },
+                { key: "subject", label: "Sujet", placeholder: "Objet du message", type: "text" },
+              ].map(({ key, label, placeholder, type }) => (
                 <div key={key}>
-                  <label style={{ fontSize: "0.7rem", color: C.gray, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: "0.3rem" }}>{label}</label>
-                  <input type={type} placeholder={placeholder} value={form[key]} onChange={e => setForm({ ...form, [key]: e.target.value })} style={{ width: "100%", background: C.bg2, border: `0.5px solid ${C.border}`, borderRadius: "20px", padding: "0.6rem 0.85rem", color: C.white, fontSize: "0.85rem", outline: "none", boxSizing: "border-box" }} />
+                  <Label htmlFor={key} style={{ fontSize: "0.68rem", color: C.gray, textTransform: "uppercase", letterSpacing: "0.09em", display: "block", marginBottom: "0.4rem", fontWeight: 500 }}>
+                    {label}
+                  </Label>
+                  <Input id={key} type={type} placeholder={placeholder} value={form[key]}
+                    onChange={e => setForm({ ...form, [key]: e.target.value })}
+                    style={fieldStyle}
+                    onFocus={e => e.target.style.borderColor = C.pinkBorder}
+                    onBlur={e => e.target.style.borderColor = C.border}
+                  />
                 </div>
               ))}
               <div>
-                <label style={{ fontSize: "0.7rem", color: C.gray, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: "0.3rem" }}>Message</label>
-                <textarea placeholder="Décrivez votre projet ou opportunité..." rows={4} value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} style={{ width: "100%", background: C.bg2, border: `0.5px solid ${C.border}`, borderRadius: "20px", padding: "0.6rem 0.85rem", color: C.white, fontSize: "0.85rem", outline: "none", resize: "vertical", boxSizing: "border-box" }} />
+                <Label htmlFor="message" style={{ fontSize: "0.68rem", color: C.gray, textTransform: "uppercase", letterSpacing: "0.09em", display: "block", marginBottom: "0.4rem", fontWeight: 500 }}>
+                  Message
+                </Label>
+                <Textarea id="message" placeholder="Décrivez votre projet ou opportunité..." rows={4}
+                  value={form.message} onChange={e => setForm({ ...form, message: e.target.value })}
+                  style={{ ...fieldStyle, resize: "vertical" }}
+                  onFocus={e => e.target.style.borderColor = C.pinkBorder}
+                  onBlur={e => e.target.style.borderColor = C.border}
+                />
               </div>
-              <button onClick={() => { if (form.name && form.email && form.message) setSent(true); }} style={{ background: C.pink, color: "#fff", border: "none", padding: "0.75rem", borderRadius: "20px", fontSize: "0.88rem", fontWeight: 700, cursor: "pointer", width: "100%" }}>Envoyer</button>
+              <button
+                onClick={() => { if (form.name && form.email && form.message) setSent(true); }}
+                style={{
+                  background: C.pink, color: "#fff", border: "none", padding: "0.8rem",
+                  borderRadius: "10px", fontSize: "0.9rem", fontWeight: 700, cursor: "pointer",
+                  width: "100%", boxShadow: "0 4px 16px rgba(254,75,193,0.35)",
+                  fontFamily: "inherit", letterSpacing: "-0.02em", transition: "all 0.18s",
+                }}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = "0 6px 24px rgba(254,75,193,0.5)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 4px 16px rgba(254,75,193,0.35)"; e.currentTarget.style.transform = "none"; }}
+              >
+                Envoyer le message
+              </button>
             </div>
           )}
         </div>
@@ -367,6 +652,7 @@ function ContactPage() {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
 export default function App() {
   const [page, setPage] = useState("about");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -387,31 +673,72 @@ export default function App() {
     { key: "contact", label: "Contact" },
   ];
 
-  const pages = { about: <AboutPage setPage={setPage} />, cv: <CVPage />, projets: <ProjetsPage />, certifications: <CertificationsPage />, contact: <ContactPage /> };
+  const pages = {
+    about: <AboutPage setPage={setPage} />, cv: <CVPage />,
+    projets: <ProjetsPage />, certifications: <CertificationsPage />, contact: <ContactPage />,
+  };
 
   return (
     <div style={{ background: C.bg, minHeight: "100vh", color: C.white, fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif", letterSpacing: "-0.03em" }}>
-      {/* ── NAV ── */}
-      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: mob ? "1rem 1.5rem" : "1rem 2.5rem", borderBottom: `0.5px solid ${C.border}`, background: "rgba(8,13,26,0.98)", position: "sticky", top: 0, zIndex: 100 }}>
-        <div style={{ fontSize: "1.3rem", fontWeight: 800, cursor: "pointer" }} onClick={() => setPage("about")}>VK<span style={{ color: C.pink }}>.</span></div>
+
+      {/* NAV */}
+      <nav style={{
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        padding: mob ? "0.85rem 1.5rem" : "0.9rem 2.5rem",
+        borderBottom: "1px solid rgba(26,32,53,0.7)",
+        background: "rgba(8,13,26,0.88)",
+        backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+        position: "sticky", top: 0, zIndex: 100,
+      }}>
+        <div style={{ fontSize: "1.35rem", fontWeight: 800, cursor: "pointer", letterSpacing: "-0.04em" }} onClick={() => setPage("about")}>
+          VK<span style={{ color: C.pink }}>.</span>
+        </div>
 
         {!mob && (
-          <div style={{ display: "flex", gap: "0.2rem" }}>
+          <div style={{ display: "flex", gap: "0.15rem", alignItems: "center" }}>
             {navItems.map(({ key, label }) => (
-              <button key={key} onClick={() => setPage(key)} style={{ background: "transparent", color: page === key ? C.pink : C.gray, border: "none", padding: "0.4rem 0.85rem", borderRadius: "20px", fontSize: "0.8rem", cursor: "pointer", fontWeight: page === key ? 700 : 400 }}>{label}</button>
+              <button key={key} onClick={() => setPage(key)}
+                style={{
+                  background: "transparent",
+                  color: page === key ? C.pink : C.gray2,
+                  border: "none",
+                  padding: "0.4rem 0.9rem", borderRadius: "8px",
+                  fontSize: "0.82rem", cursor: "pointer",
+                  fontWeight: page === key ? 700 : 400,
+                  transition: "all 0.15s", fontFamily: "inherit", letterSpacing: "-0.02em",
+                }}
+                onMouseEnter={e => { if (page !== key) e.currentTarget.style.color = C.white; }}
+                onMouseLeave={e => { if (page !== key) e.currentTarget.style.color = C.gray2; }}
+              >{label}</button>
             ))}
           </div>
         )}
 
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          {!mob && <button onClick={() => setPage("contact")} style={{ background: C.pink, color: "#fff", border: "none", padding: "0.5rem 1.25rem", borderRadius: "20px", fontSize: "0.8rem", fontWeight: 700, cursor: "pointer" }}>Me contacter</button>}
+          {!mob && (
+            <button onClick={() => setPage("contact")}
+              style={{
+                background: C.pink, color: "#fff", border: "none",
+                padding: "0.45rem 1.2rem", borderRadius: "8px",
+                fontSize: "0.82rem", fontWeight: 700, cursor: "pointer",
+                boxShadow: "0 2px 12px rgba(254,75,193,0.35)",
+                fontFamily: "inherit", letterSpacing: "-0.02em", transition: "all 0.15s",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.boxShadow = "0 4px 20px rgba(254,75,193,0.5)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 2px 12px rgba(254,75,193,0.35)"; e.currentTarget.style.transform = "none"; }}
+            >Me contacter</button>
+          )}
           {mob && (
-            <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: "transparent", border: "none", cursor: "pointer", padding: "4px" }}>
-              <div style={{ width: "22px", display: "flex", flexDirection: "column", gap: "5px" }}>
-                {[0, 1, 2].map(i => (
-                  <span key={i} style={{ width: "100%", height: "1.5px", background: C.white, display: "block", transition: "all 0.2s", transform: menuOpen ? (i === 0 ? "rotate(45deg) translate(5px,5px)" : i === 2 ? "rotate(-45deg) translate(5px,-5px)" : "scaleX(0)") : "none" }} />
-                ))}
-              </div>
+            <button onClick={() => setMenuOpen(o => !o)}
+              style={{ background: "transparent", border: "none", cursor: "pointer", padding: "4px", display: "flex", flexDirection: "column", gap: "5px" }}
+              aria-label="Menu"
+            >
+              {[0, 1, 2].map(i => (
+                <span key={i} style={{
+                  width: "22px", height: "1.5px", background: C.white, display: "block", transition: "all 0.2s",
+                  transform: menuOpen ? (i === 0 ? "rotate(45deg) translate(5px,5px)" : i === 2 ? "rotate(-45deg) translate(5px,-5px)" : "scaleX(0)") : "none",
+                }} />
+              ))}
             </button>
           )}
         </div>
@@ -419,22 +746,55 @@ export default function App() {
 
       {/* Mobile menu */}
       {mob && menuOpen && (
-        <div style={{ background: C.bg2, borderBottom: `0.5px solid ${C.border}`, padding: "1rem 1.5rem", display: "flex", flexDirection: "column", gap: "0.25rem", position: "sticky", top: "57px", zIndex: 99 }}>
+        <div style={{
+          background: "rgba(13,18,32,0.97)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+          borderBottom: `1px solid ${C.border}`, padding: "0.75rem 1.5rem 1.1rem",
+          display: "flex", flexDirection: "column", gap: "0.15rem",
+          position: "sticky", top: "57px", zIndex: 99,
+        }}>
           {navItems.map(({ key, label }) => (
-            <button key={key} onClick={() => setPage(key)} style={{ background: "transparent", color: page === key ? C.pink : C.gray2, border: "none", padding: "0.65rem 0", fontSize: "0.9rem", cursor: "pointer", fontWeight: page === key ? 700 : 400, textAlign: "left" }}>{label}</button>
+            <button key={key} onClick={() => setPage(key)}
+              style={{
+                background: "transparent",
+                color: page === key ? C.pink : C.gray2,
+                border: "none", padding: "0.7rem 0.85rem",
+                fontSize: "0.9rem", cursor: "pointer",
+                fontWeight: page === key ? 700 : 400,
+                textAlign: "left", borderRadius: "8px",
+                fontFamily: "inherit", letterSpacing: "-0.02em",
+              }}
+            >{label}</button>
           ))}
-          <button onClick={() => setPage("contact")} style={{ background: C.pink, color: "#fff", border: "none", padding: "0.7rem", borderRadius: "20px", fontSize: "0.85rem", fontWeight: 700, cursor: "pointer", marginTop: "0.5rem" }}>Me contacter</button>
+          <button onClick={() => setPage("contact")}
+            style={{
+              background: C.pink, color: "#fff", border: "none",
+              padding: "0.75rem", borderRadius: "10px",
+              fontSize: "0.88rem", fontWeight: 700, cursor: "pointer",
+              marginTop: "0.5rem", boxShadow: "0 4px 16px rgba(254,75,193,0.35)",
+              fontFamily: "inherit", letterSpacing: "-0.02em",
+            }}
+          >Me contacter</button>
         </div>
       )}
 
       <main>{pages[page]}</main>
 
-      <footer style={{ padding: mob ? "1.5rem" : "1.5rem 2.5rem", borderTop: `0.5px solid ${C.border}`, display: "flex", flexDirection: mob ? "column" : "row", justifyContent: "space-between", alignItems: mob ? "flex-start" : "center", gap: "0.75rem" }}>
-        <span style={{ fontWeight: 800 }}>VK<span style={{ color: C.pink }}>.</span></span>
+      <footer style={{
+        padding: mob ? "1.5rem" : "1.5rem 2.5rem",
+        borderTop: "1px solid rgba(26,32,53,0.6)",
+        display: "flex", flexDirection: mob ? "column" : "row",
+        justifyContent: "space-between", alignItems: mob ? "flex-start" : "center",
+        gap: "0.75rem", background: "rgba(8,13,26,0.4)",
+      }}>
+        <span style={{ fontWeight: 800, fontSize: "1.1rem", letterSpacing: "-0.04em" }}>VK<span style={{ color: C.pink }}>.</span></span>
         <span style={{ fontSize: "0.75rem", color: C.gray }}>© 2026 Vanessa Kenfack Temgoua · Data Analyst</span>
-        <div style={{ display: "flex", gap: "1rem" }}>
+        <div style={{ display: "flex", gap: "1.25rem" }}>
           {[{ label: "LinkedIn", href: "http://www.linkedin.com/in/vanessa-kenfack-temgoua-028937248" }, { label: "GitHub", href: "https://github.com/vanessatemgoua" }].map(({ label, href }) => (
-            <a key={label} href={href} target="_blank" rel="noreferrer" style={{ color: C.gray, fontSize: "0.75rem", textDecoration: "none" }}>{label}</a>
+            <a key={label} href={href} target="_blank" rel="noreferrer"
+              style={{ color: C.gray, fontSize: "0.75rem", textDecoration: "none", transition: "color 0.15s" }}
+              onMouseEnter={e => e.currentTarget.style.color = C.white}
+              onMouseLeave={e => e.currentTarget.style.color = C.gray}
+            >{label}</a>
           ))}
         </div>
       </footer>
