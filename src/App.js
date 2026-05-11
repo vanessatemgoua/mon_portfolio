@@ -419,6 +419,7 @@ function ProjetsPage() {
   const [filter, setFilter] = useState("Tous");
   const categories = ["Tous", "Power BI", "Python", "Excel"];
   const projects = [
+    { title: "Health Snowflake Pipeline", tags: ["Power BI", "SQL", "Snowflake", "Python"], cat: "Power BI, Snowflake", tags: ["Power BI", "SQL", "Snowflake", "Python"], desc: "Pipeline end-to-end sur données cardiaques : ingestion Python → Snowflake (RAW/STAGING/GOLD) → Dashboard Power BI 3 pages. Score de risque patient, segmentation par âge et analyse cholestérol.", metrics: ["1 025 patients", "6 tables GOLD", "3 pages Power BI"], icon: "↗", cap_link:"https://cap.link/4zhn27487qssp5k" },
     { title: "Global Superstore · Sales Performance", tags: ["Power BI", "DAX", "Power Query"], cat: "Power BI", desc: "Dashboard 3 pages : Vue d'ensemble, Analyse Produit, Analyse Géographique. KPIs N/N-1, scatter plot Remise vs Profit.", metrics: ["+51,5% CA", "3 pages", "DAX avancé"], icon: "↗", cap_link:"https://cap.link/vxse8f0a11wzfrh" },
     { title: "Atlas Labs · HR Analytics", tags: ["Power BI", "DAX", "RH"], cat: "Power BI", desc: "Analyse RH : attrition (16,1%), démographie des effectifs, suivi individuel des performances.", metrics: ["4 pages", "1 470 employés", "16,1% attrition"], icon: "◎", cap_link:"https://cap.link/q36npy574znk453" },
     { title: "Churn Rate · Databel", tags: ["Power BI", "DAX", "CRM"], cat: "Power BI", desc: "Identification des facteurs de désabonnement. Segmentation par profil, type de contrat et usage.", metrics: ["Segmentation", "Power Query", "DAX"], icon: "△", cap_link:"" },
@@ -499,8 +500,8 @@ function CertCard({ c }) {
       }}>En cours...</span>
       ) : (
       <span style={{
-        color: "#a1a1a1", fontSize: "0.66rem", fontWeight: 600,
-        background: "rgba(221, 225, 222, 0.1)", padding: "0.18rem 0.55rem",
+        color: "#16722d", fontSize: "0.66rem", fontWeight: 600,
+        background: "rgba(16, 124, 43, 0.1)", padding: "0.18rem 0.55rem",
         borderRadius: "5px", border: "1px solid rgba(120, 120, 118, 0.25)",
       }}>Obtenu ✓</span>
     )}
@@ -516,8 +517,8 @@ function CertificationsPage() {
     { title: "Data Analytics Job Simulation", org: "Forage", year: "2025", logo: "forage.png", status: "obtenu" },
     { title: "L'essentiel de Google Cloud Platform", org: "LinkedIn Learning", year: "2025", logo: "linkedin.png", status: "obtenu" },
     { title: "Python pour la finance", org: "LinkedIn Learning", year: "2025", logo: "linkedin.png", status: "obtenu" },
+    { title: "Data Engineer Associate in SQL", org: "Datacamp", year: "2026", logo: "datacamp.png", status: "obtenu" },
     { title: "Power BI Data Analyst Associate", org: "Microsoft", year: "2026", logo: "microsoft.png", status: "en_cours" },
-    { title: "Data Engineer Associate", org: "Datacamp", year: "2026", logo: "datacamp.png", status: "en_cours" },
     { title: "Snowflake Data Warehouse", org: "Snowflake", year: "2026", logo: "snowflake.png", status: "en_cours" },
   ];
   return (
