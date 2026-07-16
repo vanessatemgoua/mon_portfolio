@@ -29,4 +29,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: -0.03em;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+:root[data-theme="light"] body {
+  background-color: #ffffff;
+  color: #0f172a;
 }
