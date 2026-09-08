@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, createContext, useContext } from "react";
+import emailjs from "@emailjs/browser";
 import photo from './Profil_Vanessa-bg.png';
 import { Input } from "./components/ui/input";
 import { Textarea } from "./components/ui/textarea";
@@ -253,7 +254,7 @@ function AboutPage({ setPage }) {
           <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: mob ? "2.5rem" : "4rem", alignItems: "start" }}>
             <div>
               <p style={{ color: C.textSoft, lineHeight: 1.9, marginBottom: "1.25rem", fontSize: "0.94rem" }}>
-                Data Analyst avec 2 ans d'expérience en environnements industriels et médicaux, je transforme des données brutes en décisions concrètes via SQL, Snowflake, Power BI et Machine Learning. Chaque pipeline que je construis, chaque modèle que j'entraîne, chaque dashboard que je livre a un seul objectif : créer de la valeur métier mesurable.
+                Data Analyst avec 3 ans d'expérience en environnements variés (transport, agroalimentaire, médical), je transforme des données brutes en décisions concrètes via SQL, Snowflake, dbt, Power BI et Machine Learning. Chaque pipeline que je construis, chaque modèle que j'entraîne, chaque dashboard que je livre a un seul objectif : créer de la valeur métier mesurable.
               </p>
 
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
@@ -298,15 +299,15 @@ function CVPage() {
   const C = useTheme();
   const mob = useW() < 768;
   const exps = [
-    { role: "Data Analyst · Snowflake", company: "Takenco IT", period: "Mai 2025 – Mars 2026 · 11 mois", lieu: "Distanciel", secteur: "Industrie / Manufacturing", bullets: ["SQL avancé sur Snowflake pour analyses métier", "Tableaux de bord Power BI connectés à Snowflake | fiabilité 95%, -40% temps d'analyse", "Définition des KPIs et restitution des résultats aux équipes", "Qualité et cohérence des données tout au long du cycle d'analyse"] },
-    { role: "Data Analyst & IA", company: "CELEOS", period: "Juillet – Décembre 2024 · 6 mois", lieu: "Lille", secteur: "Industrie / Médical", bullets: ["+50 000 lignes de données spectrométriques structurées via Python", "Fiabilité des données à 98% (ANOVA, tests de distribution)", "3 modèles ML comparés | +15% performances prédictives", "2 dashboards interactifs Python | -40% temps d'analyse"] },
-    { role: "Data Analyst", company: "McCain Foods", period: "Juin – Décembre 2023 · 7 mois", lieu: "Lille", secteur: "Agroalimentaire / Industrie", bullets: ["+100 000 lignes de données de production traitées via Python & SQL", "Contrôles qualité automatisés | 90% de taux de conformité", "2 pipelines ETL avec feature engineering | +25% accélération du traitement", "Analyse prédictive des pannes machines | -12% temps d'arrêt"] },
+    { role: "Consultante Data ", company: "Takenco", period: "Mai 2025 – Avril 2026 · 12 mois", lieu: "Distanciel", secteur: "Transport / Mobilité", bullets: ["Modélisation dbt (staging, intermediate, mart) pour structurer les flux de l'application de réservation (courses, chauffeurs, clients) vers Snowflake", "Tests automatisés dbt (unicité, valeurs nulles, intégrité référentielle) et documentation du lineage via dbt docs", "SQL avancé sur Snowflake pour des analyses métier critiques exploitées par les équipes décisionnelles", "Tableaux de bord Power BI connectés à Snowflake | fiabilité 95%, -40% temps d'analyse", "Définition des KPIs, restitution aux équipes et versioning des modèles sous Git"] },
+    { role: "Data Analyst & IA", company: "CELEOS", period: "Janvier – Décembre 2024 · 12 mois", lieu: "Lille", secteur: "Industrie / Médical", bullets: ["+50 000 lignes de données spectrométriques structurées via Python", "Fiabilité des données à 98% (ANOVA, tests de distribution)", "3 modèles ML comparés | +15% performances prédictives", "2 dashboards interactifs Python | -40% temps d'analyse"] },
+    { role: "Data Analyst", company: "McCain Foods", period: "Janvier – Décembre 2023 · 12 mois", lieu: "Lille", secteur: "Agroalimentaire / Industrie", bullets: ["+100 000 lignes de données de production traitées via Python & SQL", "Contrôles qualité automatisés | 90% de taux de conformité", "2 pipelines ETL avec feature engineering | +25% accélération du traitement", "Analyse prédictive des pannes machines | -12% temps d'arrêt"] },
   ];
   const techGroups = [
     { label: "BI & Reporting", items: ["Power BI", "DAX", "Power Query", "Tableau Software", "Excel"] },
     { label: "SQL & Bases de données", items: ["SQL","NoSQL", "PostgreSQL", "Snowflake", "MongoDB", "MySQL"] },
     { label: "Python", items: ["Pandas", "NumPy", "Scikit-learn", "Matplotlib", "Plotly", "TensorFlow"] },
-    { label: "Data Engineering", items: ["Talend", "Airflow", "BigQuery", "GCP"] },
+    { label: "Data Engineering", items: ["Talend", "Airflow", "BigQuery", "GCP","dbt", "Git", "Github", "CI/CD"] },
     { label: "Machine Learning", items: ["Random Forest", "Régression", "ACP", "Clustering", "Séries Temporelles"] },
   ];
 
@@ -602,7 +603,7 @@ function ProjetsPage() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-function CertCard({ c }) {
+function CertCard({ c, onClick }) {
   const C = useTheme();
   const [hov, setHov] = useState(false);
   return (
@@ -614,9 +615,11 @@ function CertCard({ c }) {
         transform: hov ? "translateY(-3px)" : "none",
         boxShadow: hov ? C.certShadowHover : C.certShadow,
         position: "relative", overflow: "hidden",
+        cursor: "pointer",
       }}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
+      onClick={onClick}
     >
       <div style={{
         position: "absolute", top: 0, left: 0, right: 0, height: "2px",
@@ -659,17 +662,74 @@ function CertCard({ c }) {
   );
 }
 
+function CertModal({ cert, onClose }) {
+  const C = useTheme();
+  if (!cert) return null;
+  const isPdf = cert.doc && cert.doc.toLowerCase().endsWith(".pdf");
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, background: "rgba(0,0,0,0.65)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        zIndex: 1000, padding: "1.5rem",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: C.bg2, borderRadius: "16px", border: `1px solid ${C.border}`,
+          width: "min(560px, 100%)", maxHeight: "85vh", overflow: "hidden",
+          display: "flex", flexDirection: "column",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+        }}
+      >
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          padding: "1rem 1.25rem", borderBottom: `1px solid ${C.border}`,
+        }}>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>{cert.title}</div>
+            <div style={{ fontSize: "0.75rem", color: C.textMuted }}>{cert.org}</div>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Fermer"
+            style={{
+              background: "none", border: "none", color: C.textSoft,
+              fontSize: "1.4rem", cursor: "pointer", lineHeight: 1, padding: "0.25rem",
+            }}
+          >×</button>
+        </div>
+        <div style={{ flex: 1, overflow: "auto", background: "#fff" }}>
+          {cert.doc ? (
+            isPdf
+              ? <iframe src={cert.doc} title={cert.title} style={{ width: "100%", height: "70vh", border: "none" }} />
+              : <img src={cert.doc} alt={cert.title} style={{ width: "100%", display: "block" }} />
+          ) : (
+            <div style={{ padding: "2.5rem 1.5rem", textAlign: "center", color: "#888", fontSize: "0.85rem" }}>Document non disponible</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function CertificationsPage() {
   const C = useTheme();
   const mob = useW() < 768;
+  const [selected, setSelected] = useState(null);
   const certs = [
-    { title: "Data Analyst Associate", org: "Datacamp", year: "2025", logo: "datacamp.png", status: "obtenu" },
-    { title: "Data Analytics Job Simulation", org: "Forage", year: "2025", logo: "forage.png", status: "obtenu" },
-    { title: "L'essentiel de Google Cloud Platform", org: "LinkedIn Learning", year: "2025", logo: "linkedin.png", status: "obtenu" },
-    { title: "Python pour la finance", org: "LinkedIn Learning", year: "2025", logo: "linkedin.png", status: "obtenu" },
-    { title: "Data Engineer Associate in SQL", org: "Datacamp", year: "2026", logo: "datacamp.png", status: "obtenu" },
-    { title: "Power BI Data Analyst Associate", org: "Microsoft", year: "2026", logo: "microsoft.png", status: "en_cours" },
-    { title: "Snowflake Data Warehouse", org: "Snowflake", year: "2026", logo: "snowflake.png", status: "en_cours" },
+    { title: "Data Analyst Associate", org: "Datacamp", year: "2025", logo: "datacamp.png", status: "obtenu", doc: "/certifications/datacamp-data-analyst-associate.pdf" },
+    { title: "Data Analytics Job Simulation", org: "Forage", year: "2025", logo: "forage.png", status: "obtenu", doc: "/certifications/forage-data-analytics-job-simulation.pdf" },
+    { title: "L'essentiel de Google Cloud Platform", org: "LinkedIn Learning", year: "2025", logo: "linkedin.png", status: "obtenu", doc: "/certifications/linkedin-gcp-essentials.jpg" },
+    { title: "Python pour la finance", org: "LinkedIn Learning", year: "2025", logo: "linkedin.png", status: "obtenu", doc: "/certifications/linkedin-python-finance.jpg" },
+    { title: "Data Engineer Associate in SQL", org: "Datacamp", year: "2026", logo: "datacamp.png", status: "obtenu", doc: "/certifications/datacamp-data-engineer-associate-sql.pdf" },
+    { title: "SQL Associate", org: "Datacamp", year: "2026", logo: "datacamp.png", status: "obtenu", doc: "/certifications/datacamp-SQL-Associate.pdf" },
+    { title: "Data Associate in Snowflake", org: "Datacamp", year: "2026", logo: "datacamp.png", status: "obtenu", doc: "/certifications/datacamp-Associate-Data%20in-Snowflake.pdf" },
+    { title: "dbt Fundamentals", org: "Datacamp", year: "2026", logo: "datacamp.png", status: "obtenu", doc: "/certifications/datacamp-dbt-fundamentals.pdf" },
+    { title: "Power BI Data Analyst Associate", org: "Microsoft", year: "2026", logo: "microsoft.png", status: "en_cours", doc: null },
+    { title: "Snowflake Data Warehouse", org: "Snowflake", year: "2026", logo: "snowflake.png", status: "en_cours", doc: null },
   ];
   return (
     <div style={{ padding: mob ? "2.5rem 1.5rem" : "3.5rem 2.5rem", maxWidth: "960px", margin: "0 auto" }}>
@@ -677,8 +737,9 @@ function CertificationsPage() {
       <h2 style={{ fontSize: "1.9rem", fontWeight: 700, marginBottom: "0.6rem" }}>Certifications</h2>
       <p style={{ color: C.textSoft, marginBottom: "2.5rem", fontSize: "0.94rem" }}>Certifications professionnelles obtenues pour valider mes compétences data.</p>
       <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "repeat(auto-fill, minmax(270px, 1fr))", gap: "1.1rem" }}>
-        {certs.map(c => <CertCard key={c.title} c={c} />)}
+        {certs.map(c => <CertCard key={c.title} c={c} onClick={() => setSelected(c)} />)}
       </div>
+      <CertModal cert={selected} onClose={() => setSelected(null)} />
     </div>
   );
 }
@@ -689,6 +750,23 @@ function ContactPage() {
   const mob = useW() < 768;
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = () => {
+    if (!form.name || !form.email || !form.message) return;
+    setSending(true);
+    setError("");
+    emailjs.send(
+      process.env.REACT_APP_EMAILJS_SERVICE_ID,
+      process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+      { name: form.name, email: form.email, subject: form.subject, message: form.message },
+      { publicKey: process.env.REACT_APP_EMAILJS_PUBLIC_KEY }
+    )
+      .then(() => setSent(true))
+      .catch(() => setError("L'envoi a échoué. Réessayez ou contactez-moi directement par email."))
+      .finally(() => setSending(false));
+  };
 
   const fieldStyle = {
     width: "100%", background: `rgba(${C.bg2Rgb},0.8)`,
@@ -703,7 +781,7 @@ function ContactPage() {
     <div style={{ padding: mob ? "2.5rem 1.5rem" : "3.5rem 2.5rem", maxWidth: "820px", margin: "0 auto" }}>
       <SectionLabel>Contact</SectionLabel>
       <h2 style={{ fontSize: "1.9rem", fontWeight: 700, marginBottom: "0.6rem" }}>Travaillons ensemble</h2>
-      <p style={{ color: C.textSoft, marginBottom: "3rem", fontSize: "0.94rem" }}>Data Analyst disponible pour missions, CDI ou freelance. Mobile sur Paris et régions.</p>
+      <p style={{ color: C.textSoft, marginBottom: "3rem", fontSize: "0.94rem" }}>Data Analyst disponible pour missions, CDI, CDD ou freelance. Mobile sur tout le territoire français.</p>
       <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1.15fr", gap: mob ? "2.5rem" : "3.5rem" }}>
 
         {/* Contact info */}
@@ -784,18 +862,23 @@ function ContactPage() {
                   onBlur={e => e.target.style.borderColor = C.border}
                 />
               </div>
+              {error && (
+                <div style={{ color: "#ef4444", fontSize: "0.8rem" }}>{error}</div>
+              )}
               <button
-                onClick={() => { if (form.name && form.email && form.message) setSent(true); }}
+                onClick={handleSubmit}
+                disabled={sending}
                 style={{
                   background: C.pink, color: "#fff", border: "none", padding: "0.8rem",
-                  borderRadius: "10px", fontSize: "0.9rem", fontWeight: 700, cursor: "pointer",
+                  borderRadius: "10px", fontSize: "0.9rem", fontWeight: 700,
+                  cursor: sending ? "default" : "pointer", opacity: sending ? 0.7 : 1,
                   width: "100%", boxShadow: `0 4px 16px rgba(${C.pinkRgb},0.35)`,
                   fontFamily: "inherit", letterSpacing: "-0.02em", transition: "all 0.18s",
                 }}
-                onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 6px 24px rgba(${C.pinkRgb},0.5)`; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                onMouseEnter={e => { if (!sending) { e.currentTarget.style.boxShadow = `0 6px 24px rgba(${C.pinkRgb},0.5)`; e.currentTarget.style.transform = "translateY(-1px)"; } }}
                 onMouseLeave={e => { e.currentTarget.style.boxShadow = `0 4px 16px rgba(${C.pinkRgb},0.35)`; e.currentTarget.style.transform = "none"; }}
               >
-                Envoyer le message
+                {sending ? "Envoi en cours..." : "Envoyer le message"}
               </button>
             </div>
           )}
